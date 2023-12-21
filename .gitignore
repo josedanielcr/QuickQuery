@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# postgreSQL
+DB/QuickQuery-db1/archive/
+DB/QuickQuery-db1/pgdata/
+DB/QuickQuery-db2/archive/
+DB/QuickQuery-db2/pgdata/
