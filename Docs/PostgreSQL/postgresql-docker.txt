@@ -1,0 +1,158 @@
+1. - Run a postgreSQL database (simple)
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+
+2. - Run it with docker compose (take a look at the YAML file)
+cd storage/databases/postgresql/1-introduction
+docker compose up
+
+3. - Mount volumes to the container to persist data
+docker run -it --rm --name postgres `
+  -e POSTGRES_PASSWORD=admin123 `
+  -v ${PWD}/pgdata:/var/lib/postgresql/data `
+  postgres:15.0
+
+4. - Connect to sql and execute some commands:
+# enter the container
+docker exec -it postgres bash
+
+# login to postgres
+psql -h localhost -U postgres
+
+#create a table
+CREATE TABLE customers (firstname text,lastname text, customer_id serial);
+
+#add record
+INSERT INTO customers (firstname, lastname) VALUES ( 'Bob', 'Smith');
+
+#show table
+\dt
+
+# get records
+SELECT * FROM customers;
+
+# quit 
+\q
+
+
+5. - Networking: Bind a different port 
+docker run -it --rm --name postgres `
+  -e POSTGRES_PASSWORD=admin123 `
+  -v ${PWD}/pgdata:/var/lib/postgresql/data `
+  -p 5000:5432 `
+  postgres:15.0
+
+6. - Do it with docker compose
+version: '3.1'
+services:
+  db:
+    image: postgres:15.0
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin123
+    ports:
+    - 5000:5432
+    volumes:
+    - ./pgdata:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+
+7. - Setup streaming replication: 
+
+	1. first we create new network:
+	docker network create postgres
+	
+	2. run the first replica and the main one like this:
+	cd storage/databases/postgresql/3-replication
+docker run -it --rm --name postgres-1 `
+--net postgres `
+-e POSTGRES_USER=postgresadmin `
+-e POSTGRES_PASSWORD=admin123 `
+-e POSTGRES_DB=postgresdb `
+-e PGDATA="/data" `
+-v ${PWD}/postgres-1/pgdata:/data `
+-v ${PWD}/postgres-1/config:/config `
+-v ${PWD}/postgres-1/archive:/mnt/server/archive `
+-p 5000:5432 `
+postgres:15.0 -c 'config_file=/config/postgresql.conf'
+
+	3. setup replication, for that we need to check the pg-hba.config to set up a replication user
+		1. go inside the container 
+		docker exec -it postgres-1 bash
+		2. create a new user with replication capabilities
+		createuser -U postgresadmin -P -c 5 --replication replicationUser
+		3. setup the password in this case: replication
+		4. Allow this user to access the db:
+			- go to the pg-hba.config and add this:
+			host     replication     replicationUser         0.0.0.0/0        md5
+	4. WAL (Write Ahead Login): it protects data-integrity, when a transation is made it'll write it to a transaction 
+		log and flash it to disk and it'll not be considered finished until it's been written to disk, this is the core 
+		mechanism behind replication, to enable it:
+			wal_level = replica
+			max_wal_senders = 3
+		
+	5. Enable archive: The process of archiving the transaction logs so we can recover the database at any given time   
+                in case of failure, to enable it:
+		archive_mode = on
+                archive_command = 'test ! -f /mnt/server/archive/%f && cp %p /mnt/server/archive/%f'
+
+	6. take 4 and 5 settings and write them into the postgresql.conf
+
+	7. to test it you can stop and restart the server and check the archive folder.
+
+	
+	---------- setup and run the second instance
+	1. take a look at 'pgbase_backup' this is a tool that is used to create standby instances and backup postgres databases, 
+	it'll connect to the primary instace as a replication user and take a backup and restored to data folder, it'll like 
+	the data folder of the primary instance but it'll be ready to receive replica request from the primary instance meaning 
+        that the secondary instance will use this tool to take a backup of the data folder of the primary and create a new data
+        directory, then take this data directory and make a new docker volume for the secondary standby instance, so when this 
+        instance is up and running it'll start reading the transaction log of the primary instance, it'll technically run as a 
+        read-only instance.
+
+		1. take a database backup(set up the data directory in the second instance):
+		 
+                docker run -it --rm `
+--net postgres `
+-v ${PWD}/postgres-2/pgdata:/data `
+--entrypoint /bin/bash postgres:15.0
+		2. take a backup by loggin into the postgres-1 with the replicationUser and writing the backup to the /data
+		pg_basebackup -h postgres-1 -p 5432 -U replicationUser -D /data/ -Fp -Xs -R
+
+		
+		3. then start the secondary instance:
+		docker run -it --rm --name postgres-2 `
+--net postgres `
+-e POSTGRES_USER=postgresadmin `
+-e POSTGRES_PASSWORD=admin123 `
+-e POSTGRES_DB=postgresdb `
+-e PGDATA="/data" `
+-v ${PWD}/postgres-2/pgdata:/data `
+-v ${PWD}/postgres-2/config:/config `
+-v ${PWD}/postgres-2/archive:/mnt/server/archive `
+-p 5001:5432 `
+postgres:15.0 -c 'config_file=/config/postgresql.conf'
+
+		4. Test the replication
+			-log into the primary instace: docker exec -it postgres-1 bash
+			- log into the postgres db: psql --username=postgresadmin postgresdb
+			- create a table: CREATE TABLE customers (firstname text, customer_id serial, date_created timestamp);
+			- exit the db: \q, then exit the container with: exit
+			- log into the postgres-2 instance with: docker exec -it postgres-2 bash
+			- log into the db with the same cmd: psql --username=postgresadmin postgresdb
+			- run \dt and you should see the replicated table.
+
+
+	--------- Run a failover scenario after replication
+	1. To simulate it, we'll shut server 1 down. postgres does not have native failove built-in but we can use a tool for that
+	postgres has a load balancing tool, to checkout this, we'll manually failover using the pg_ctl tool, it'll run agains the
+        stand-by server and it'll turned it from a read-only standby server into a read-write instance, so it can be used as a 
+        primary. 
+
+		- pretend we lost postgres-1: docker rm -f postgres-1
+		- login into postgres-2: docker exec -it postgres-2 bash
+		- promote it into a primary instance: runuser -u postgres -- pg_ctl promote
