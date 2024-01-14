@@ -1,4 +1,5 @@
-﻿using API.Dtos;
+﻿using API.Configuration;
+using API.Dtos;
 using API.Entities;
 using API.Shared;
 using Microsoft.IdentityModel.Tokens;
@@ -57,12 +58,14 @@ public static class SecurityUtils
         return true;
     }
 
-    public static string GenerateJwtToken(User user)
+    public static string GenerateJwtToken(User user, bool isForRefreshToken = false)
     {
         ArgumentNullException.ThrowIfNull(user);
 
-        var secret = Environment.GetEnvironmentVariable("Jwt:Secret");
-        var expiresAt = Environment.GetEnvironmentVariable("Jwt:ExpirationInMinutes");
+        var secret = AddConfigurationHelper.config.GetSection("Jwt:Secret").Value;
+        string? expiresAt;
+        if (!isForRefreshToken) expiresAt = AddConfigurationHelper.config.GetSection("Jwt:ExpirationInMinutes").Value;
+        else expiresAt = AddConfigurationHelper.config.GetSection("Jwt:ExpirationInMinutesRefresh").Value;
 
         List<Claim> claims = new()
         {
@@ -79,5 +82,10 @@ public static class SecurityUtils
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public static string GenerateRefreshToken(User user)
+    {
+        return GenerateJwtToken(user, true);
     }
 }

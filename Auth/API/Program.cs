@@ -21,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.ApplyDatabaseMigrations();
 }
 
+AddConfigurationHelper.Initialize(builder.Configuration);
 app.MapCarter();
 app.UseHttpsRedirection();
 app.Run();

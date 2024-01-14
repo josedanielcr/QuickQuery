@@ -42,7 +42,6 @@ public static class LoginUser
 
         public async Task<Result<LoginResultDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-
             var validatorResult = _validator.Validate(request);
             if (!validatorResult.IsValid)
             {
@@ -62,12 +61,25 @@ public static class LoginUser
             }
 
             var token = GetToken(user);
+            var refreshToken = GetRefreshToken(user);
             return Result.Success(new LoginResultDto
             {
                 Token = token,
+                RefreshToken = refreshToken,
                 User = user.Adapt<UserDto>()
             });
+        }
 
+        private string GetRefreshToken(User user)
+        {
+            try
+            {
+                return SecurityUtils.GenerateRefreshToken(user);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private async Task<User> ValidateIfUserExists(string email, CancellationToken cancellationToken, Command request)
@@ -92,7 +104,7 @@ public static class LoginUser
         {
             try
             {
-                return SecurityUtils.GenerateJwtToken(user);
+                return SecurityUtils.GenerateJwtToken(user, false);
             }
             catch (Exception)
             {
