@@ -1,6 +1,6 @@
 ﻿
 # QuickQuery
-A dynamic, multi-container application featuring a .NET API, trie-based search algorithm, and Redis caching. It emphasizes efficient data retrieval through a master-slave database architecture and enhances search functionality by prioritizing popular queries, ensuring optimized and fast search suggestions.
+This project is a .NET application featuring a trie-based search algorithm and Redis caching, optimized for efficient data retrieval using a master-slave database architecture. It excels in providing fast, optimized search suggestions, with a focus on popular queries. The application specifically targets a dataset of the cost of living index by country and cities, offering users quick access to global living cost data.
 
 
 ## Run locally
