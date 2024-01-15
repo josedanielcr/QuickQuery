@@ -43,7 +43,6 @@ public static class CreateUser
 
         public async Task<Result<UserDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-
             var validatorResult = _validator.Validate(request);
             if (!validatorResult.IsValid)
             {
@@ -56,7 +55,21 @@ public static class CreateUser
                 return Result.Failure<UserDto>(new Error("CreateUser.PasswordHash", message));
             }
 
-            var user = new User
+            User user = GenerateUserResult(request, passwordHash, passwordSalt);
+
+            return await SaveAndReturnNewUser(user, cancellationToken);
+        }
+
+        private async Task<Result<UserDto>> SaveAndReturnNewUser(User user, CancellationToken cancellationToken)
+        {
+            _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return user.Adapt<UserDto>();
+        }
+
+        private static User GenerateUserResult(Command request, byte[] passwordHash, byte[] passwordSalt)
+        {
+            return new User
             {
                 Id = Guid.NewGuid(),
                 Username = request.Username,
@@ -64,10 +77,6 @@ public static class CreateUser
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };
-
-            _dbContext.Users.Add(user);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            return user.Adapt<UserDto>();
         }
 
         private static (bool Success, byte[] PasswordHash, byte[] PasswordSalt, string message) TryCreatePasswordHash(string password)

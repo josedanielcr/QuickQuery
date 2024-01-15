@@ -60,14 +60,25 @@ public static class LoginUser
                 return Result.Failure<LoginResultDto>(new Error("LoginUser.InvalidPassword", "Invalid password"));
             }
 
-            var token = GetToken(user);
-            var refreshToken = GetRefreshToken(user);
+            string token, refreshToken;
+            GenerateUserTokens(user, out token, out refreshToken);
+            return ReturnLoginResult(user, token, refreshToken);
+        }
+
+        private static Result<LoginResultDto> ReturnLoginResult(User user, string token, string refreshToken)
+        {
             return Result.Success(new LoginResultDto
             {
                 Token = token,
                 RefreshToken = refreshToken,
                 User = user.Adapt<UserDto>()
             });
+        }
+
+        private void GenerateUserTokens(User user, out string token, out string refreshToken)
+        {
+            token = GetToken(user);
+            refreshToken = GetRefreshToken(user);
         }
 
         private string GetRefreshToken(User user)
