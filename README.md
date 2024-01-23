@@ -95,3 +95,15 @@ Start the secondary instance
     -p 5001:5432 `
     postgres:16.1 -c 'config_file=/config/postgresql.conf'
 ```
+
+**Setup Redis**
+
+Pull the Redis Image:
+```bash
+docker pull redis:7.2.4
+```
+
+Start the Redis Container
+```bash
+docker run --name quickquery-redis --network postgres -d redis:7.2.4
+```
