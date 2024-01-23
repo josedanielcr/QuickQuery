@@ -26,10 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
     <Folder Include="Database\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Features\" />
     <Folder Include="Migrations\" />
     <Folder Include="Utilities\" />
     <Folder Include="Shared\" />

@@ -11,6 +11,7 @@ builder.Services.AddApplicationMediatR();
 builder.Services.AddApplicationFluentValidation();
 builder.Services.AddCarter();
 builder.Services.AddApplicationJwtValidation(builder.Configuration);
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -25,4 +26,5 @@ AddConfigurationHelper.Initialize(builder.Configuration);
 app.MapCarter();
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseAuthorization();
 app.Run();

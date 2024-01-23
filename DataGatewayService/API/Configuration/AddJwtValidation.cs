@@ -6,7 +6,7 @@ namespace API.Configuration
 {
     public static class AddJwtValidation
     {
-        public static void AddApplicationJwtValidation(this IServiceCollection services,
+        public static IServiceCollection AddApplicationJwtValidation(this IServiceCollection services,
             IConfiguration Configuration)
         {
             string key = GetJwtKey(Configuration);
@@ -31,6 +31,8 @@ namespace API.Configuration
                     ValidateLifetime = true
                 };
             });
+
+            return services;
         }
 
         private static string GetJwtKey(IConfiguration Configuration)
