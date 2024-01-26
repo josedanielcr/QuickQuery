@@ -10,6 +10,7 @@ builder.Services.AddApplicationFluentValidation();
 builder.Services.AddCarter();
 builder.Services.AddApplicationJwtValidation(builder.Configuration);
 builder.Services.AddAuthorization();
+builder.Services.AddRedisConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
