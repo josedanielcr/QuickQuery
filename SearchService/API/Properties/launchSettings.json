@@ -30,13 +30,15 @@
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8085",
         "ASPNETCORE_HTTP_PORTS": "8084"
       },
       "publishAllPorts": true,
+      "httpPort": 8084,
+      "sslPort": 8085,
       "useSSL": true,
       "DockerfileRunArguments": "--network=quickquerynetwork"
     }

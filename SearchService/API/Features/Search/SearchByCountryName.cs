@@ -4,6 +4,7 @@ using API.Shared;
 using API.Utilities;
 using Carter;
 using MediatR;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 
 namespace API.Features.Search
@@ -12,7 +13,8 @@ namespace API.Features.Search
     {
         public class Query : IRequest<Result<CountrySearchResult>>
         {
-            public string Name { get; set; }
+            public IDictionary<string, StringValues> Headers { get; set; } = null!;
+            public string Name { get; set; } = string.Empty;
         }
 
         internal sealed class Handler : IRequestHandler<Query, Result<CountrySearchResult>>
@@ -36,7 +38,13 @@ namespace API.Features.Search
                     return result;
                 }
 
-                result = await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request);
+                if(result.IsFailure && result.Error.Code != "Cache.NotFound")
+                {
+                    return result;
+                }
+
+                result = await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request,
+                    request.Headers);
                 if (result.IsSuccess)
                 {
                     searchCountryCacheUtils.SetCountryResponseToCache(result);
@@ -51,9 +59,13 @@ public class GetCountryDataByNameEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/search/country", async (string name, ISender sender) =>
+        app.MapGet("api/search/country", async (HttpContext httpContext, string name, ISender sender) =>
         {
-            var query = new SearchByCountryName.Query { Name = name };
+            var query = new SearchByCountryName.Query 
+            { 
+                Name = name,
+                Headers = httpContext.Request.Headers.ToDictionary(x => x.Key, x => x.Value)
+            };
             var result = await sender.Send(query);
 
             if (result.IsFailure)

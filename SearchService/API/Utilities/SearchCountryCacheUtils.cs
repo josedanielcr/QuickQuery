@@ -19,10 +19,14 @@ namespace API.Utilities
         public async Task<Result<CountrySearchResult>> GetCountryDataFromCache(Query request)
         {
             Result<string> result = await cache.GetCacheValueAsync(request.Name);
-            if (result == null)
+            if (result.IsFailure && result.Error.Code == "Cache.NotFound")
             {
                 return Result.Failure<CountrySearchResult>(
                            new Error("Cache.NotFound", $"Cache key {request.Name} not found."));
+            }
+            else if (result.IsFailure)
+            {
+                return Result.Failure<CountrySearchResult>(result.Error);
             }
             return DeserializeCacheItemToCountrySearchResult(result);
         }
@@ -49,7 +53,7 @@ namespace API.Utilities
 
         private async Task ManageCacheCountryResponse(Result<CountrySearchResult> result, Result<string> cacheResult)
         {
-            if (cacheResult == null)
+            if (cacheResult.IsFailure && cacheResult.Error.Code == "Cache.NotFound")
             {
                 await cache.SetCacheValueAsync(result.Value.Name, 
                     JsonConvert.SerializeObject(result.Value),

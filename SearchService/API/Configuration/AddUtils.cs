@@ -9,6 +9,7 @@ namespace API.Configuration
             services.AddScoped<CacheUtils>();
             services.AddScoped<SearchCountryCacheUtils>();
             services.AddScoped<SearchCountryHttpUtils>();
+            services.AddScoped<HttpUtils>();
             return services;
         }
     }

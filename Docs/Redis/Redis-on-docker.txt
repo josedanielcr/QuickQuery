@@ -1,2 +1,2 @@
 1. docker pull redis:7.2.4
-2. docker run --name quickquery-redis --network postgres -p 6379:6379 -d redis:7.2.4
+2. docker run --name quickquery-redis --network quickquerynetwork -p 6379:6379 -d --rm redis:7.2.4 redis-server --requirepass quickquerypass
