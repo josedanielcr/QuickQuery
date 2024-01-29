@@ -8,23 +8,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Features.Countries
 {
-    public static class GetCountries
+    public class GetCountryByName
     {
-        public class Query : IRequest<Result<List<CountryResponse>>>{ }
+        public class Query : IRequest<Result<CountryResponse>>
+        {
+            public string Name { get; set; }
+        }
 
-        internal sealed class Hanlder : IRequestHandler<Query, Result<List<CountryResponse>>>
+        internal sealed class Handler : IRequestHandler<Query, Result<CountryResponse>>
         {
             private readonly ApplicationDbContext dbContext;
 
-            public Hanlder(ApplicationDbContext dbContext)
+            public Handler(ApplicationDbContext dbContext)
             {
                 this.dbContext = dbContext;
             }
 
-            public async Task<Result<List<CountryResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<CountryResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 return await dbContext.Countries
                     .AsNoTracking()
+                    .Where(x=> x.Name == request.Name)
                     .Select(x => new CountryResponse
                     {
                         Id = x.Id,
@@ -38,20 +42,19 @@ namespace API.Features.Countries
                         CreatedAt = x.CreatedAt,
                         UpdatedAt = x.UpdatedAt,
                         Popularity = x.Popularity
-                    })
-                    .ToListAsync(cancellationToken);
+                    }).FirstOrDefaultAsync(cancellationToken);
             }
         }
     }
 }
 
-public class GetCountriesEndpoint : ICarterModule
+public class GetCountryByNameEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/countries", async (ISender sender) =>
+        app.MapGet("api/country", async (string name, ISender sender) =>
         {
-            var query = new GetCountries.Query { };
+            var query = new GetCountryByName.Query { Name = name };
             var result = await sender.Send(query);
 
             if (result.IsFailure)

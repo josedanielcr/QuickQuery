@@ -1,16 +1,18 @@
 using API.Configuration;
+using API.Utilities;
 using Carter;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationMediatR();
 builder.Services.AddApplicationFluentValidation();
 builder.Services.AddCarter();
 builder.Services.AddApplicationJwtValidation(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddRedisConfiguration(builder.Configuration);
+builder.Services.AddApplicationUtils();
+builder.Services.AddCustomHttpClient();
 
 var app = builder.Build();
 

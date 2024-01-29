@@ -5,10 +5,13 @@
         public static IServiceCollection AddRedisConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
+            string connectionString 
+                = configuration.GetSection("ConnectionStrings:RedisConnectionString").Value!;
+
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration =
-                    configuration.GetConnectionString("ConnectionStrings:RedisConnectionString");
+                options.Configuration = connectionString;
+                options.InstanceName = "0";
             });
             return services;
         }
