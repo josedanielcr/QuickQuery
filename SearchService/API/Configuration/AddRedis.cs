@@ -11,7 +11,6 @@
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = connectionString;
-                options.InstanceName = "0";
             });
             return services;
         }
