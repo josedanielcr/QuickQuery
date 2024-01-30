@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Shared;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using static API.Features.Search.SearchByCountryName;
 
@@ -18,17 +19,16 @@ namespace API.Utilities
         }
         public async Task<Result<CountrySearchResult>> GetCountryDataFromCache(Query request)
         {
-            Result<string> result = await cache.GetCacheValueAsync(request.Name);
-            if (result.IsFailure && result.Error.Code == "Cache.NotFound")
+            Result<string> cacheResult = await cache.GetCacheValueAsync(request.Name);
+
+            if (cacheResult.IsFailure)
             {
-                return Result.Failure<CountrySearchResult>(
-                           new Error("Cache.NotFound", $"Cache key {request.Name} not found."));
+                return cacheResult.Error.Code == "Cache.NotFound"
+                   ? Result.Failure<CountrySearchResult>(new Error("Cache.NotFound", $"Cache key {request.Name} not found."))
+                   : Result.Failure<CountrySearchResult>(cacheResult.Error);
             }
-            else if (result.IsFailure)
-            {
-                return Result.Failure<CountrySearchResult>(result.Error);
-            }
-            return DeserializeCacheItemToCountrySearchResult(result);
+
+            return DeserializeCacheItemToCountrySearchResult(cacheResult);
         }
 
         private Result<CountrySearchResult> DeserializeCacheItemToCountrySearchResult(Result<string> result)
@@ -36,29 +36,21 @@ namespace API.Utilities
             CountrySearchResult? deserializedCacheItem =
                     JsonConvert.DeserializeObject<CountrySearchResult>(result.Value);
 
-            if (deserializedCacheItem == null)
-            {
-                return Result.Failure<CountrySearchResult>(
-                    new Error("Cache.DeserializeObject",
-                        "Failed to deserialize the cached item. The data might be corrupted, incorrectly formatted, or incompatible with the expected object structure."));
-            }
-            return Result.Success(deserializedCacheItem);
+            return deserializedCacheItem != null
+                            ? Result.Success(deserializedCacheItem)
+                            : Result.Failure<CountrySearchResult>(
+                                new Error("Cache.DeserializeObject", 
+                                "Failed to deserialize the cached item."));
         }
 
-        public async void SetCountryResponseToCache(Result<CountrySearchResult> result)
+        public async Task SetCountryResponseToCache(Result<CountrySearchResult> result)
         {
             var cacheResult = await cache.GetCacheValueAsync(result.Value.Name);
-            await ManageCacheCountryResponse(result, cacheResult);
-        }
-
-        private async Task ManageCacheCountryResponse(Result<CountrySearchResult> result, Result<string> cacheResult)
-        {
             if (cacheResult.IsFailure && cacheResult.Error.Code == "Cache.NotFound")
             {
-                await cache.SetCacheValueAsync(result.Value.Name, 
+                await cache.SetCacheValueAsync(result.Value.Name,
                     JsonConvert.SerializeObject(result.Value),
-                    TimeSpan.FromMinutes(double.Parse(
-                        configuration.GetSection("CacheOptions:CacheDurationInMinutes").Value!)));
+                    GetCacheDuration());
             }
             else
             {
@@ -66,31 +58,28 @@ namespace API.Utilities
             }
         }
 
+        private TimeSpan GetCacheDuration()
+        {
+            var durationInMinutes = configuration.GetValue<int>("CacheOptions:CacheDurationInMinutes");
+            return TimeSpan.FromMinutes(durationInMinutes);
+        }
+
         private async Task UpdateCountryCacheExpirationTime(Result<CountrySearchResult> result)
         {
-            int popularity = result.Value.Popularity;
-            int newCacheExpiration = CalculateExpirationTimeBasedOnPopularity(popularity);
-            await cache.UpdateCacheExpiryAsync(result.Value.Name,
+            var newCacheExpiration 
+                = CalculateExpirationTimeBasedOnPopularity(result.Value.Popularity);
+            await cache.UpdateCacheExpiryAsync(result.Value.Name, 
                 TimeSpan.FromMinutes(newCacheExpiration));
         }
 
         private int CalculateExpirationTimeBasedOnPopularity(int popularity)
         {
-            int newCacheExpiration = int.Parse(configuration.GetSection("CacheOptions:CacheDurationInMinutes").Value!)
-                + (popularity * int.Parse(configuration.GetSection("CacheOptions:IncrementalFactorInMinutes").Value!));
-            newCacheExpiration = ValidateMaxExpirationTime(newCacheExpiration);
+            var baseDuration = configuration.GetValue<int>("CacheOptions:CacheDurationInMinutes");
+            var incrementalFactor = configuration.GetValue<int>("CacheOptions:IncrementalFactorInMinutes");
+            var maxDuration = configuration.GetValue<int>("CacheOptions:MaxCacheDurationInMinutes");
 
-            return newCacheExpiration;
-        }
-
-        private int ValidateMaxExpirationTime(int newCacheExpiration)
-        {
-            if (newCacheExpiration > int.Parse(configuration.GetSection("CacheOptions:MaxCacheDurationInMinutes").Value!))
-            {
-                newCacheExpiration = int.Parse(configuration.GetSection("CacheOptions:MaxCacheDurationInMinutes").Value!);
-            }
-
-            return newCacheExpiration;
+            var newCacheExpiration = baseDuration + (popularity * incrementalFactor);
+            return Math.Min(newCacheExpiration, maxDuration);
         }
     }
 }

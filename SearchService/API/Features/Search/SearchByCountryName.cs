@@ -5,7 +5,6 @@ using API.Utilities;
 using Carter;
 using MediatR;
 using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 
 namespace API.Features.Search
 {
@@ -31,25 +30,16 @@ namespace API.Features.Search
 
             public async Task<Result<CountrySearchResult>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Result<CountrySearchResult> result;
-                result = await searchCountryCacheUtils.GetCountryDataFromCache(request);
-                if (result.IsSuccess)
-                {
-                    return result;
-                }
+                Result<CountrySearchResult> cacheResult 
+                    = await searchCountryCacheUtils.GetCountryDataFromCache(request);
+                if (cacheResult.IsSuccess) return cacheResult;
 
-                if(result.IsFailure && result.Error.Code != "Cache.NotFound")
-                {
-                    return result;
-                }
+                if(cacheResult.IsFailure && cacheResult.Error.Code != "Cache.NotFound") return cacheResult;
 
-                result = await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request,
-                    request.Headers);
-                if (result.IsSuccess)
-                {
-                    searchCountryCacheUtils.SetCountryResponseToCache(result);
-                }
-                return result;  
+                Result<CountrySearchResult> httpResult 
+                    = await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request,request.Headers);
+                if (httpResult.IsSuccess) await searchCountryCacheUtils.SetCountryResponseToCache(httpResult);
+                return httpResult;  
             }
         }
     }

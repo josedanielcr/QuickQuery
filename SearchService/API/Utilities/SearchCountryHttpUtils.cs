@@ -21,42 +21,25 @@ namespace API.Utilities
 
         public async Task<Result<CountrySearchResult>> GetCountryDataFromDataGatewayService(Query request, IDictionary<string, StringValues> headers)
         {
-            var url = BuildDataGatewayUrl() + $"country?name={request.Name}";
+            var url = $"{configuration["ServicesUrl:DataGateway"]}/api/country?name={request.Name}";
             var response = await httpUtils.ExecuteHttpGetAsync(url, headers);
 
-            if (!response.IsSuccess)
+            return response.IsSuccess
+                ? await HandleHttpResponse(response.Value)
+                : Result.Failure<CountrySearchResult>(new Error("DataGateway.HttpError", "Error occurred during HTTP request."));
+        }
+
+        private async Task<Result<CountrySearchResult>> HandleHttpResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
             {
-                return Result.Failure<CountrySearchResult>(new Error("DataGateway.HttpError",
-                    "Error occurred during HTTP request."));
+                return Result.Failure<CountrySearchResult>(new Error("DataGateway.NotFound", "DataGateway returned no data."));
             }
 
-            return await HandleHttpCountryRetrieval(response.Value);
-        }
-
-        private string BuildDataGatewayUrl()
-        {
-            return $"{configuration.GetSection("ServicesUrl:DataGateway").Value}/api/";
-        }
-
-        private async Task<Result<CountrySearchResult>> HandleHttpCountryRetrieval(HttpResponseMessage response)
-        {
-            using (response)
-            {
-                return response.IsSuccessStatusCode
-                    ? await HandleSuccessCountryResponse(response)
-                    : Result.Failure<CountrySearchResult>(new Error("DataGateway.NotFound", "DataGateway returned no data."));
-            }
-        }
-
-        private async Task<Result<CountrySearchResult>> HandleSuccessCountryResponse(HttpResponseMessage response)
-        {
             var data = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrEmpty(data))
-            {
-                return Result.Failure<CountrySearchResult>(new Error("DataGateway.EmptyResponse", "DataGateway returned an empty response."));
-            }
-
-            return httpUtils.DeserializeResponseContent<CountrySearchResult>(data);
+            return string.IsNullOrEmpty(data)
+                ? Result.Failure<CountrySearchResult>(new Error("DataGateway.EmptyResponse", "DataGateway returned an empty response."))
+                : httpUtils.DeserializeResponseContent<CountrySearchResult>(data);
         }
     }
 }

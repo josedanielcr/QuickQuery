@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using API.Shared;
+﻿using API.Shared;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 
@@ -12,7 +8,7 @@ public class HttpUtils
 
     public HttpUtils(IHttpClientFactory httpClientFactory)
     {
-        this.httpClientFactory = httpClientFactory; //temporal
+        this.httpClientFactory = httpClientFactory;
     }
 
     public async Task<Result<HttpResponseMessage>> ExecuteHttpGetAsync(string url,
