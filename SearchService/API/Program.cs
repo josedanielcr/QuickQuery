@@ -5,6 +5,7 @@ using Carter;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationMediatR();
 builder.Services.AddApplicationFluentValidation();
 builder.Services.AddCarter();
