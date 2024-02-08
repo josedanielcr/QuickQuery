@@ -1,6 +1,7 @@
 ﻿using API.Shared;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using System.Text;
 
 public class HttpUtils
 {
@@ -26,6 +27,48 @@ public class HttpUtils
         {
             return Result.Failure<HttpResponseMessage>(new Error("HttpGetError", ex.Message));
         }
+    }
+
+    public async Task<Result<HttpResponseMessage>> ExecuteHttpPutAsync(string url, object data,
+               IDictionary<string, StringValues> headers)
+    {
+        try
+        {
+            var client = httpClientFactory.CreateClient("BypassSslValidation");
+            var request = new HttpRequestMessage(HttpMethod.Put, url);
+            AddHeadersToRequest(request, headers);
+            AddRequestContentData(data, request);
+            var response = await client.SendAsync(request);
+            return Result.Success(response);
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure<HttpResponseMessage>(new Error("HttpPutError", ex.Message));
+        }
+    }
+
+    public async Task<Result<HttpResponseMessage>> ExecuteHttpPostAsync(string url, object data,
+               IDictionary<string, StringValues> headers)
+    {
+        try
+        {
+            var client = httpClientFactory.CreateClient("BypassSslValidation");
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            AddHeadersToRequest(request, headers);
+            AddRequestContentData(data, request);
+            var response = await client.SendAsync(request);
+            return Result.Success(response);
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure<HttpResponseMessage>(new Error("HttpPostError", ex.Message));
+        }
+    }
+
+    private static void AddRequestContentData(object data, HttpRequestMessage request)
+    {
+        request.Content = new StringContent(JsonConvert.SerializeObject(data),
+            Encoding.UTF8, "application/json");
     }
 
     private void AddHeadersToRequest(HttpRequestMessage request, IDictionary<string, StringValues> headers)

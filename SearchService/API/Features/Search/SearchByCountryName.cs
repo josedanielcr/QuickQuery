@@ -20,25 +20,47 @@ namespace API.Features.Search
         {
             private readonly SearchCountryCacheUtils searchCountryCacheUtils;
             private readonly SearchCountryHttpUtils searchCountryHttpUtils;
+            private readonly CountrySearchLogUtils countrySearchLogUtils;
 
             public Handler(SearchCountryCacheUtils searchCountryCacheUtils,
-                SearchCountryHttpUtils searchCountryHttpUtils)
+                SearchCountryHttpUtils searchCountryHttpUtils,
+                CountrySearchLogUtils countrySearchLogUtils)
             {
                 this.searchCountryCacheUtils = searchCountryCacheUtils;
                 this.searchCountryHttpUtils = searchCountryHttpUtils;
+                this.countrySearchLogUtils = countrySearchLogUtils;
             }
 
             public async Task<Result<CountrySearchResult>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Result<CountrySearchResult> cacheResult 
                     = await searchCountryCacheUtils.GetCountryDataFromCache(request);
-                if (cacheResult.IsSuccess) return cacheResult;
+                if (cacheResult.IsSuccess)
+                {
+                    var result = await searchCountryHttpUtils.IncreaseCountryPropularity(cacheResult, request.Headers);
+                    var logResult = await countrySearchLogUtils.LogCountrySearch(request, cacheResult);
+                    if (logResult.IsFailure)
+                    {
+                        return Result.Failure<CountrySearchResult>(logResult.Error);
+                    }
+                    return result;
+                }
 
                 if(cacheResult.IsFailure && cacheResult.Error.Code != "Cache.NotFound") return cacheResult;
 
                 Result<CountrySearchResult> httpResult 
                     = await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request,request.Headers);
-                if (httpResult.IsSuccess) await searchCountryCacheUtils.SetCountryResponseToCache(httpResult);
+                if (httpResult.IsSuccess)
+                {
+                    await searchCountryCacheUtils.SetCountryResponseToCache(httpResult);
+                    var result = await searchCountryHttpUtils.IncreaseCountryPropularity(httpResult, request.Headers);
+                    var logResult = await countrySearchLogUtils.LogCountrySearch(request, cacheResult);
+                    if (logResult.IsFailure)
+                    {
+                        return Result.Failure<CountrySearchResult>(logResult.Error);
+                    }
+                    return result;
+                }
                 return httpResult;  
             }
         }
