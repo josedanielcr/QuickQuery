@@ -10,6 +10,8 @@ namespace API.Configuration
             services.AddScoped<SearchCountryCacheUtils>();
             services.AddScoped<SearchCountryHttpUtils>();
             services.AddScoped<HttpUtils>();
+            services.AddScoped<CountrySearchLogUtils>();
+            services.AddScoped<JwtUtils>();
             return services;
         }
     }

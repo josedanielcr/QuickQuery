@@ -9,5 +9,6 @@ namespace API.Database
         {
         }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<CountrySearchLog> CountriesSearchLog { get; set; }
     }
 }

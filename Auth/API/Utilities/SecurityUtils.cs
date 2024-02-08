@@ -102,7 +102,8 @@ public static class SecurityUtils
         return new()
         {
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.Username)
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Sid, user.Id.ToString())
         };
     }
 

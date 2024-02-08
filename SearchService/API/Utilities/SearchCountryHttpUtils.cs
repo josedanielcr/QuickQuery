@@ -1,10 +1,7 @@
 ﻿using API.Contracts;
 using API.Shared;
 using static API.Features.Search.SearchByCountryName;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Primitives;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace API.Utilities
 {
@@ -23,10 +20,23 @@ namespace API.Utilities
         {
             var url = $"{configuration["ServicesUrl:DataGateway"]}/api/country?name={request.Name}";
             var response = await httpUtils.ExecuteHttpGetAsync(url, headers);
+            return await HandleHttpResponse(response);
+        }
 
+        private async Task<Result<CountrySearchResult>> HandleHttpResponse(Result<HttpResponseMessage> response)
+        {
             return response.IsSuccess
-                ? await HandleHttpResponse(response.Value)
-                : Result.Failure<CountrySearchResult>(new Error("DataGateway.HttpError", "Error occurred during HTTP request."));
+                            ? await HandleHttpResponse(response.Value)
+                            : Result.Failure<CountrySearchResult>(new Error("DataGateway.HttpError", "Error occurred during HTTP request."));
+        }
+
+        public async Task<Result<CountrySearchResult>> IncreaseCountryPropularity(Result<CountrySearchResult> result,
+            IDictionary<string, StringValues> headers)
+        {
+            var url = $"{configuration["ServicesUrl:DataGateway"]}/api/country/increase-popularity";
+            var response = 
+                await httpUtils.ExecuteHttpPutAsync(url,new { Id = result.Value.Id }, headers);
+            return await HandleHttpResponse(response);
         }
 
         private async Task<Result<CountrySearchResult>> HandleHttpResponse(HttpResponseMessage response)
