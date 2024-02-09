@@ -54,7 +54,7 @@ namespace API.Features.Search
                 {
                     await searchCountryCacheUtils.SetCountryResponseToCache(httpResult);
                     var result = await searchCountryHttpUtils.IncreaseCountryPropularity(httpResult, request.Headers);
-                    var logResult = await countrySearchLogUtils.LogCountrySearch(request, cacheResult);
+                    var logResult = await countrySearchLogUtils.LogCountrySearch(request, httpResult);
                     if (logResult.IsFailure)
                     {
                         return Result.Failure<CountrySearchResult>(logResult.Error);
