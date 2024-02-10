@@ -1,6 +1,6 @@
-﻿using API.Dtos;
+﻿using QuickqueryAuthenticationAPI.Dtos;
 
-namespace API.Contracts
+namespace QuickqueryAuthenticationAPI.Contracts
 {
     public class LoginResultRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace API.Shared
+﻿namespace QuickquerySearchAPI.Shared
 {
     public record Error(string Code, string Message)
     {

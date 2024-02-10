@@ -1,7 +1,8 @@
-﻿using API.Shared;
+﻿using QuickquerySearchAPI.Shared;
 using Microsoft.Extensions.Caching.Distributed;
+using QuickquerySearchAPI.Resources.Cache;
 
-namespace API.Utilities
+namespace QuickquerySearchAPI.Utilities
 {
     public class CacheUtils
     {
@@ -18,7 +19,9 @@ namespace API.Utilities
 
             if (result is null)
             {
-                return Result.Failure<string>(new Error("Cache.NotFound", $"Cache key {key} not found."));
+                return Result.Failure<string>(
+                    new Error("Cache.NotFound", $"Cache key {key} not found.")
+                    );
             }
             return result;
         }

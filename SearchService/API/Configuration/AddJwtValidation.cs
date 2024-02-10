@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace API.Configuration
+namespace QuickquerySearchAPI.Configuration
 {
     public static class AddJwtValidation
     {

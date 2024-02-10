@@ -1,4 +1,4 @@
-﻿namespace API.Common
+﻿namespace QuickqueryAuthenticationAPI.Common
 {
     public class BaseEntity
     {

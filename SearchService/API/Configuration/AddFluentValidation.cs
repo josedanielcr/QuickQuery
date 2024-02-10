@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace API.Configuration
+namespace QuickquerySearchAPI.Configuration
 {
     public static class AddFluentValidation
     {

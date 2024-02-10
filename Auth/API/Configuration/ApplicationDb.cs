@@ -1,7 +1,7 @@
-﻿using API.Database;
+﻿using QuickqueryAuthenticationAPI.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Configuration
+namespace QuickqueryAuthenticationAPI.Configuration
 {
     public static class ApplicationDb
     {

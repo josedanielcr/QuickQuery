@@ -1,11 +1,11 @@
-﻿using API.Contracts;
-using API.Database;
-using API.Shared;
+﻿using QuickqueryDataGatewayAPI.Contracts;
+using QuickqueryDataGatewayAPI.Database;
+using QuickqueryDataGatewayAPI.Shared;
 using Carter;
 using MediatR;
-using static API.Features.Countries.UpdateCountryPopularity;
+using static QuickqueryDataGatewayAPI.Features.Countries.UpdateCountryPopularity;
 
-namespace API.Features.Countries
+namespace QuickqueryDataGatewayAPI.Features.Countries
 {
     public class UpdateCountryPopularity
     {

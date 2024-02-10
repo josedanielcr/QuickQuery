@@ -1,4 +1,4 @@
-﻿namespace API.Dtos
+﻿namespace QuickqueryAuthenticationAPI.Dtos
 {
     public class LoginResultDto
     {

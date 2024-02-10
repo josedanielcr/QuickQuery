@@ -1,4 +1,4 @@
-﻿namespace API.Shared
+﻿namespace QuickquerySearchAPI.Shared
 {
     public class Result<TValue>: Result
     {

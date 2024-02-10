@@ -1,5 +1,5 @@
-using API.Configuration;
-using API.Extensions;
+using QuickqueryDataGatewayAPI.Configuration;
+using QuickqueryDataGatewayAPI.Extensions;
 using Carter;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,7 @@
-﻿using API.Entities;
+﻿using QuickqueryAuthenticationAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Database
+namespace QuickqueryAuthenticationAPI.Database
 {
     public class ApplicationDbContext :  DbContext
     {

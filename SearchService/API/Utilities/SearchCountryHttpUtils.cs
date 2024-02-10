@@ -1,9 +1,10 @@
-﻿using API.Contracts;
-using API.Shared;
-using static API.Features.Search.SearchByCountryName;
+﻿using QuickquerySearchAPI.Contracts;
+using QuickquerySearchAPI.Shared;
+using static QuickquerySearchAPI.Features.Search.SearchByCountryName;
 using Microsoft.Extensions.Primitives;
+using QuickquerySearchAPI.Resources.DataGateway;
 
-namespace API.Utilities
+namespace QuickquerySearchAPI.Utilities
 {
     public class SearchCountryHttpUtils
     {
@@ -27,7 +28,10 @@ namespace API.Utilities
         {
             return response.IsSuccess
                             ? await HandleHttpResponse(response.Value)
-                            : Result.Failure<CountrySearchResult>(new Error("DataGateway.HttpError", "Error occurred during HTTP request."));
+                            : Result.Failure<CountrySearchResult>(
+                                new Error("", 
+                                "Error occurred during HTTP request.")
+                             );
         }
 
         public async Task<Result<CountrySearchResult>> IncreaseCountryPropularity(Result<CountrySearchResult> result,

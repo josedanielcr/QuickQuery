@@ -1,14 +1,14 @@
-﻿using API.Configuration;
-using API.Dtos;
-using API.Entities;
-using API.Shared;
+﻿using QuickqueryAuthenticationAPI.Configuration;
+using QuickqueryAuthenticationAPI.Dtos;
+using QuickqueryAuthenticationAPI.Entities;
+using QuickqueryAuthenticationAPI.Shared;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace API.Utilities;
+namespace QuickqueryAuthenticationAPI.Utilities;
 public static class SecurityUtils
 {
     public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

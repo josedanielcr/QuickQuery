@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace API.Migrations
+namespace QuickqueryAuthenticationAPI.Migrations
 {
     /// <inheritdoc />
     public partial class auth1 : Migration

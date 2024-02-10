@@ -1,6 +1,6 @@
-﻿using API.Common;
+﻿using QuickqueryDataGatewayAPI.Common;
 
-namespace API.Entities
+namespace QuickqueryDataGatewayAPI.Entities
 {
     public class CountrySearchLog : BaseEntity
     {

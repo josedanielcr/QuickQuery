@@ -1,6 +1,6 @@
-﻿using API.Common;
+﻿using QuickqueryAuthenticationAPI.Common;
 
-namespace API.Entities
+namespace QuickqueryAuthenticationAPI.Entities
 {
     public class User : BaseEntity
     {

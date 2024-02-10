@@ -1,6 +1,6 @@
 ﻿using Carter;
 
-namespace API.Configuration
+namespace QuickqueryAuthenticationAPI.Configuration
 {
     public static class AddCarter
     {

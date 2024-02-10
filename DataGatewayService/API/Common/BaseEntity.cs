@@ -1,4 +1,4 @@
-﻿namespace API.Common
+﻿namespace QuickqueryDataGatewayAPI.Common
 {
     public class BaseEntity
     {

@@ -1,12 +1,13 @@
-﻿using API.Contracts;
-using API.Features.Search;
-using API.Shared;
-using API.Utilities;
+﻿using QuickquerySearchAPI.Contracts;
+using QuickquerySearchAPI.Features.Search;
+using QuickquerySearchAPI.Shared;
+using QuickquerySearchAPI.Utilities;
 using Carter;
 using MediatR;
 using Microsoft.Extensions.Primitives;
+using QuickquerySearchAPI.Resources.Cache;
 
-namespace API.Features.Search
+namespace QuickquerySearchAPI.Features.Search
 {
     public class SearchByCountryName
     {
@@ -33,35 +34,49 @@ namespace API.Features.Search
 
             public async Task<Result<CountrySearchResult>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Result<CountrySearchResult> cacheResult 
-                    = await searchCountryCacheUtils.GetCountryDataFromCache(request);
+                var cacheResult = await GetCachedCountryData(request);
                 if (cacheResult.IsSuccess)
                 {
-                    var result = await searchCountryHttpUtils.IncreaseCountryPropularity(cacheResult, request.Headers);
-                    var logResult = await countrySearchLogUtils.LogCountrySearch(request, cacheResult);
-                    if (logResult.IsFailure)
-                    {
-                        return Result.Failure<CountrySearchResult>(logResult.Error);
-                    }
-                    return result;
+                    return await ProcessSuccessfulResult(request, cacheResult);
                 }
 
-                if(cacheResult.IsFailure && cacheResult.Error.Code != "Cache.NotFound") return cacheResult;
+                if (cacheResult.IsFailure && cacheResult.Error.Code != CacheCodeMessages.CacheNotFound)
+                {
+                    return cacheResult;
+                }
 
-                Result<CountrySearchResult> httpResult 
-                    = await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request,request.Headers);
+                var httpResult = await FetchDataFromHttpService(request);
                 if (httpResult.IsSuccess)
                 {
                     await searchCountryCacheUtils.SetCountryResponseToCache(httpResult);
-                    var result = await searchCountryHttpUtils.IncreaseCountryPropularity(httpResult, request.Headers);
-                    var logResult = await countrySearchLogUtils.LogCountrySearch(request, httpResult);
-                    if (logResult.IsFailure)
-                    {
-                        return Result.Failure<CountrySearchResult>(logResult.Error);
-                    }
-                    return result;
+                    return await ProcessSuccessfulResult(request, httpResult);
                 }
-                return httpResult;  
+
+                return httpResult;
+            }
+
+            private async Task<Result<CountrySearchResult>> ProcessSuccessfulResult(Query request,
+                Result<CountrySearchResult> result)
+            {
+                var popularityResult 
+                    = await searchCountryHttpUtils.IncreaseCountryPropularity(result, request.Headers);
+                
+                if (popularityResult.IsFailure)
+                {
+                    return Result.Failure<CountrySearchResult>(popularityResult.Error);
+                }
+                _ = countrySearchLogUtils.LogCountrySearch(request, result);
+                return popularityResult;
+            }
+
+            private async Task<Result<CountrySearchResult>> GetCachedCountryData(Query request)
+            {
+                return await searchCountryCacheUtils.GetCountryDataFromCache(request);
+            }
+
+            private async Task<Result<CountrySearchResult>> FetchDataFromHttpService(Query request)
+            {
+                return await searchCountryHttpUtils.GetCountryDataFromDataGatewayService(request, request.Headers);
             }
         }
     }

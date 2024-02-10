@@ -1,7 +1,7 @@
-﻿using API.Database;
+﻿using QuickqueryDataGatewayAPI.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Extensions
+namespace QuickqueryDataGatewayAPI.Extensions
 {
     public static class ApplyMigrations
     {

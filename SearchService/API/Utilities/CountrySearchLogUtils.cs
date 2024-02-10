@@ -1,8 +1,8 @@
-﻿using API.Contracts;
-using API.Shared;
-using static API.Features.Search.SearchByCountryName;
+﻿using QuickquerySearchAPI.Contracts;
+using QuickquerySearchAPI.Shared;
+using static QuickquerySearchAPI.Features.Search.SearchByCountryName;
 
-namespace API.Utilities
+namespace QuickquerySearchAPI.Utilities
 {
     public class CountrySearchLogUtils
     {
@@ -21,7 +21,7 @@ namespace API.Utilities
 
         public async Task<Result> LogCountrySearch(Query request, Result<CountrySearchResult> result)
         {
-            var url = $"{configuration["ServicesUrl:DataGateway"]}/api/country/search-log";
+            var url = $"{configuration["ServicesUrl:DataGateway"]}/QuickquerySearchAPI/country/search-log";
             var token = request.Headers["Authorization"].ToString().Split(" ")[1];
             var userSid = jwtUtils.GetSidFromToken(token);
             Guid userSidGuid = Guid.Parse(userSid!);
