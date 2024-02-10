@@ -1,4 +1,4 @@
-﻿namespace API.Contracts
+﻿namespace QuickqueryDataGatewayAPI.Contracts
 {
     public class CountryResponse
     {

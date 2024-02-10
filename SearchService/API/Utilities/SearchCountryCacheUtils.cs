@@ -1,10 +1,11 @@
-﻿using API.Contracts;
-using API.Shared;
+﻿using QuickquerySearchAPI.Contracts;
+using QuickquerySearchAPI.Shared;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using static API.Features.Search.SearchByCountryName;
+using static QuickquerySearchAPI.Features.Search.SearchByCountryName;
+using QuickquerySearchAPI.Resources.Cache;
 
-namespace API.Utilities
+namespace QuickquerySearchAPI.Utilities
 {
     public class SearchCountryCacheUtils
     {
@@ -23,8 +24,10 @@ namespace API.Utilities
 
             if (cacheResult.IsFailure)
             {
-                return cacheResult.Error.Code == "Cache.NotFound"
-                   ? Result.Failure<CountrySearchResult>(new Error("Cache.NotFound", $"Cache key {request.Name} not found."))
+                return cacheResult.Error.Code == CacheCodeMessages.CacheNotFound
+                   ? Result.Failure<CountrySearchResult>(
+                       new Error(CacheCodeMessages.CacheNotFound, 
+                        string.Format(CacheMessages.Cache_NotFound,request.Name)))
                    : Result.Failure<CountrySearchResult>(cacheResult.Error);
             }
 
@@ -39,14 +42,14 @@ namespace API.Utilities
             return deserializedCacheItem != null
                             ? Result.Success(deserializedCacheItem)
                             : Result.Failure<CountrySearchResult>(
-                                new Error("Cache.DeserializeObject", 
-                                "Failed to deserialize the cached item."));
+                                new Error(CacheCodeMessages.CacheDeserializeError, 
+                                CacheMessages.Cache_DeserializeObject));
         }
 
         public async Task SetCountryResponseToCache(Result<CountrySearchResult> result)
         {
             var cacheResult = await cache.GetCacheValueAsync(result.Value.Name);
-            if (cacheResult.IsFailure && cacheResult.Error.Code == "Cache.NotFound")
+            if (cacheResult.IsFailure && cacheResult.Error.Code == CacheCodeMessages.CacheNotFound)
             {
                 await cache.SetCacheValueAsync(result.Value.Name,
                     JsonConvert.SerializeObject(result.Value),

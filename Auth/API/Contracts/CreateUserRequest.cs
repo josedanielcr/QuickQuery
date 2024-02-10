@@ -1,4 +1,4 @@
-﻿namespace API.Contracts
+﻿namespace QuickqueryAuthenticationAPI.Contracts
 {
     public class CreateUserRequest
     {

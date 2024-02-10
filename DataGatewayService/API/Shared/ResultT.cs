@@ -1,4 +1,4 @@
-﻿namespace API.Shared
+﻿namespace QuickqueryDataGatewayAPI.Shared
 {
     public class Result<TValue>: Result
     {

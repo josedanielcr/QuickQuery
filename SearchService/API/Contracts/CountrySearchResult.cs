@@ -1,4 +1,4 @@
-﻿namespace API.Contracts
+﻿namespace QuickquerySearchAPI.Contracts
 {
     public class CountrySearchResult
     {

@@ -1,6 +1,6 @@
 ﻿using Carter;
 
-namespace API.Configuration
+namespace QuickqueryDataGatewayAPI.Configuration
 {
     public static class AddCarter
     {

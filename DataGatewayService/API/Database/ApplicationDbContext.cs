@@ -1,7 +1,7 @@
-﻿using API.Entities;
+﻿using QuickqueryDataGatewayAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Database
+namespace QuickqueryDataGatewayAPI.Database
 {
     public class ApplicationDbContext :  DbContext
     {

@@ -1,16 +1,16 @@
-﻿using API.Contracts;
-using API.Database;
-using API.Dtos;
-using API.Entities;
-using API.Features.Users;
-using API.Shared;
-using API.Utilities;
+﻿using QuickqueryAuthenticationAPI.Contracts;
+using QuickqueryAuthenticationAPI.Database;
+using QuickqueryAuthenticationAPI.Dtos;
+using QuickqueryAuthenticationAPI.Entities;
+using QuickqueryAuthenticationAPI.Features.Users;
+using QuickqueryAuthenticationAPI.Shared;
+using QuickqueryAuthenticationAPI.Utilities;
 using Carter;
 using FluentValidation;
 using Mapster;
 using MediatR;
 
-namespace API.Features.Users;
+namespace QuickqueryAuthenticationAPI.Features.Users;
 public static class CreateUser
 {
     public class Command : IRequest<Result<UserDto>>

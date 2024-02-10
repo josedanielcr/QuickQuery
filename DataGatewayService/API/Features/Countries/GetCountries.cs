@@ -1,12 +1,12 @@
-﻿using API.Contracts;
-using API.Database;
-using API.Features.Countries;
-using API.Shared;
+﻿using QuickqueryDataGatewayAPI.Contracts;
+using QuickqueryDataGatewayAPI.Database;
+using QuickqueryDataGatewayAPI.Features.Countries;
+using QuickqueryDataGatewayAPI.Shared;
 using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Features.Countries
+namespace QuickqueryDataGatewayAPI.Features.Countries
 {
     public static class GetCountries
     {

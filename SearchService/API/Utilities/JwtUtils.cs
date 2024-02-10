@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace API.Utilities
+namespace QuickquerySearchAPI.Utilities
 {
     public class JwtUtils
     {

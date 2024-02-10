@@ -1,7 +1,7 @@
-﻿using API.Database;
+﻿using QuickqueryAuthenticationAPI.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Extensions
+namespace QuickqueryAuthenticationAPI.Extensions
 {
     public static class ApplyMigrations
     {

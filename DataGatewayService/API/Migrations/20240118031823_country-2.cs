@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace API.Migrations
+namespace QuickqueryDataGatewayAPI.Migrations
 {
     /// <inheritdoc />
     public partial class country2 : Migration

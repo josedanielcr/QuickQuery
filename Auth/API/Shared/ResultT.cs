@@ -1,4 +1,4 @@
-﻿namespace API.Shared
+﻿namespace QuickqueryAuthenticationAPI.Shared
 {
     public class Result<TValue>: Result
     {

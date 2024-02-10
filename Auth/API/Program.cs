@@ -1,6 +1,6 @@
-using API.Configuration;
-using API.Database;
-using API.Extensions;
+using QuickqueryAuthenticationAPI.Configuration;
+using QuickqueryAuthenticationAPI.Database;
+using QuickqueryAuthenticationAPI.Extensions;
 using Carter;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,5 +1,5 @@
-using API.Configuration;
-using API.Utilities;
+using QuickquerySearchAPI.Configuration;
+using QuickquerySearchAPI.Utilities;
 using Carter;
 
 var builder = WebApplication.CreateBuilder(args);

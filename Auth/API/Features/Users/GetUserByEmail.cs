@@ -1,12 +1,12 @@
-﻿using API.Contracts;
-using API.Database;
-using API.Features.Users;
-using API.Shared;
+﻿using QuickqueryAuthenticationAPI.Contracts;
+using QuickqueryAuthenticationAPI.Database;
+using QuickqueryAuthenticationAPI.Features.Users;
+using QuickqueryAuthenticationAPI.Shared;
 using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Features.Users
+namespace QuickqueryAuthenticationAPI.Features.Users
 {
     public static class GetUserByEmail
     {

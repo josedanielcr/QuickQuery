@@ -1,14 +1,14 @@
-﻿using API.Contracts;
-using API.Database;
-using API.Entities;
-using API.Features.CountrySearchLogs;
-using API.Shared;
+﻿using QuickqueryDataGatewayAPI.Contracts;
+using QuickqueryDataGatewayAPI.Database;
+using QuickqueryDataGatewayAPI.Entities;
+using QuickqueryDataGatewayAPI.Features.CountrySearchLogs;
+using QuickqueryDataGatewayAPI.Shared;
 using Carter;
 using Mapster;
 using MediatR;
-using static API.Features.CountrySearchLogs.CreateCountrySearchLog;
+using static QuickqueryDataGatewayAPI.Features.CountrySearchLogs.CreateCountrySearchLog;
 
-namespace API.Features.CountrySearchLogs
+namespace QuickqueryDataGatewayAPI.Features.CountrySearchLogs
 {
     public class CreateCountrySearchLog
     {
