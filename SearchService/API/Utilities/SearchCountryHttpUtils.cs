@@ -29,8 +29,8 @@ namespace QuickquerySearchAPI.Utilities
             return response.IsSuccess
                             ? await HandleHttpResponse(response.Value)
                             : Result.Failure<CountrySearchResult>(
-                                new Error("", 
-                                "Error occurred during HTTP request.")
+                                new Error(DataGatewayCodeMessages.DataGatewayHttpError, 
+                                DataGatewayMessages.DataGateway_HttpError)
                              );
         }
 
@@ -47,12 +47,17 @@ namespace QuickquerySearchAPI.Utilities
         {
             if (!response.IsSuccessStatusCode)
             {
-                return Result.Failure<CountrySearchResult>(new Error("DataGateway.NotFound", "DataGateway returned no data."));
+                return Result.Failure<CountrySearchResult>(
+                    new Error(DataGatewayCodeMessages.DataGatewayNotFound, 
+                    DataGatewayMessages.DataGateway_NotFound));
             }
 
             var data = await response.Content.ReadAsStringAsync();
             return string.IsNullOrEmpty(data)
-                ? Result.Failure<CountrySearchResult>(new Error("DataGateway.EmptyResponse", "DataGateway returned an empty response."))
+                ? Result.Failure<CountrySearchResult>(
+                    new Error(DataGatewayCodeMessages.DataGatewayEmptyResponse, 
+                    DataGatewayMessages.DataGateway_EmptyResponse)
+                    )
                 : httpUtils.DeserializeResponseContent<CountrySearchResult>(data);
         }
     }

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using System.Text;
+using QuickquerySearchAPI.Resources.Http;
+using QuickquerySearchAPI.Resources.Internal;
 
 public class HttpUtils
 {
@@ -25,7 +27,9 @@ public class HttpUtils
         }
         catch (Exception ex)
         {
-            return Result.Failure<HttpResponseMessage>(new Error("HttpGetError", ex.Message));
+            return Result.Failure<HttpResponseMessage>(
+                new Error(HttpCodeMessages.Http_GetError,
+                string.Format(HttpMessages.HttpGetError, url, ex.Message)));
         }
     }
 
@@ -43,7 +47,9 @@ public class HttpUtils
         }
         catch (Exception ex)
         {
-            return Result.Failure<HttpResponseMessage>(new Error("HttpPutError", ex.Message));
+            return Result.Failure<HttpResponseMessage>(new Error(
+                HttpCodeMessages.Http_PutError,
+                string.Format(HttpMessages.HttpPutError, url, ex.Message)));
         }
     }
 
@@ -61,7 +67,9 @@ public class HttpUtils
         }
         catch (Exception ex)
         {
-            return Result.Failure<HttpResponseMessage>(new Error("HttpPostError", ex.Message));
+            return Result.Failure<HttpResponseMessage>(new Error(
+                HttpCodeMessages.Http_PostError,
+                string.Format(HttpMessages.HttpPostError, url, ex.Message)));
         }
     }
 
@@ -86,12 +94,15 @@ public class HttpUtils
             var result = JsonConvert.DeserializeObject<T>(data);
             return result != null 
                 ? Result.Success(result) 
-                : Result.Failure<T>(new Error("DeserializationError", 
-                    "Failed to deserialize the response."));
+                : Result.Failure<T>(new Error(
+                    InternalCodeMessages.DeserializationError,
+                    string.Format(InternalMessages.Deserialization_Error, "")));
         }
         catch (JsonException ex)
         {
-            return Result.Failure<T>(new Error("JsonDeserializationError", ex.Message));
+            return Result.Failure<T>(new Error(
+                InternalCodeMessages.DeserializationError,
+                string.Format(InternalMessages.Deserialization_Error, ex.Message)));
         }
     }
 }

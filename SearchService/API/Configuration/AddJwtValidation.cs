@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using QuickquerySearchAPI.Resources.Internal;
 using System.Text;
 
 namespace QuickquerySearchAPI.Configuration
@@ -40,7 +41,7 @@ namespace QuickquerySearchAPI.Configuration
             string key = Configuration["Jwt:Secret"]!;
 
             if (string.IsNullOrEmpty(key))
-                throw new Exception("Jwt:Secret is not set in appsettings.json");
+                throw new Exception(InternalMessages.JwtSecretNotSetInAppSettings);
             return key;
         }
     }

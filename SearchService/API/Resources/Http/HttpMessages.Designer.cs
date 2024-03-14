@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace QuickquerySearchAPI.Resources.Internal {
+namespace QuickquerySearchAPI.Resources.Http {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace QuickquerySearchAPI.Resources.Internal {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class InternalMessages {
+    public class HttpMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal InternalMessages() {
+        internal HttpMessages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace QuickquerySearchAPI.Resources.Internal {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("QuickquerySearchAPI.Resources.Internal.InternalMessages", typeof(InternalMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("QuickquerySearchAPI.Resources.Http.HttpMessages", typeof(HttpMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -59,27 +59,40 @@ namespace QuickquerySearchAPI.Resources.Internal {
                 resourceCulture = value;
             }
         }
-        public static string JwtSecretNotSetInAppSettings
-        {
-            get
-            {
-                return ResourceManager.GetString("JwtSecretNotSetInAppSettings", resourceCulture);
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Http.DeleteError.
+        /// </summary>
+        public static string HttpDeleteError {
+            get {
+                return ResourceManager.GetString("HttpDeleteError", resourceCulture);
             }
         }
-
-        public static string Deserialization_Error
-        {
-            get
-            {
-                return ResourceManager.GetString("Deserialization_Error", resourceCulture);
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Http.GetError.
+        /// </summary>
+        public static string HttpGetError {
+            get {
+                return ResourceManager.GetString("HttpGetError", resourceCulture);
             }
         }
-
-        public static string UserSid_NotFound
-        {
-            get
-            {
-                return ResourceManager.GetString("UserSid_NotFound", resourceCulture);
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Http.PostError.
+        /// </summary>
+        public static string HttpPostError {
+            get {
+                return ResourceManager.GetString("HttpPostError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Http.PutError.
+        /// </summary>
+        public static string HttpPutError {
+            get {
+                return ResourceManager.GetString("HttpPutError", resourceCulture);
             }
         }
     }

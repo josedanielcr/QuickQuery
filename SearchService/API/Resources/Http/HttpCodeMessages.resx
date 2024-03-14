@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeserializationError" xml:space="preserve">
-    <value>Deserialization.Error</value>
+  <data name="Http.DeleteError" xml:space="preserve">
+    <value>The executed delete endpoint {0} returned {1}</value>
   </data>
-  <data name="UserSidNotFound" xml:space="preserve">
-    <value>UserSid.NotFound</value>
+  <data name="Http.GetError" xml:space="preserve">
+    <value>The executed get endpoint {0} returned {1}</value>
+  </data>
+  <data name="Http.PostError" xml:space="preserve">
+    <value>The executed post endpoint {0} returned {1}</value>
+  </data>
+  <data name="Http.PutError" xml:space="preserve">
+    <value>The executed put endpoint {0} returned {1}</value>
   </data>
 </root>

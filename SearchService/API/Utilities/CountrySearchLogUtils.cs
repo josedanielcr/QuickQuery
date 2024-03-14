@@ -1,4 +1,5 @@
 ﻿using QuickquerySearchAPI.Contracts;
+using QuickquerySearchAPI.Resources.Internal;
 using QuickquerySearchAPI.Shared;
 using static QuickquerySearchAPI.Features.Search.SearchByCountryName;
 
@@ -28,8 +29,9 @@ namespace QuickquerySearchAPI.Utilities
 
             if (userSid == null)
             {
-                return Result.Failure(new Error("UserSid.NotFound", "The User sid was not found in the" +
-                    "request token"));
+                return Result.Failure(new Error(
+                    InternalCodeMessages.UserSidNotFound,
+                    InternalMessages.UserSid_NotFound)); 
             }
 
             return await ExecuteCountryLogRequest(request, result, url, userSidGuid);
