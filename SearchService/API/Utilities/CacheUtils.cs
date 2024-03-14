@@ -20,8 +20,8 @@ namespace QuickquerySearchAPI.Utilities
             if (result is null)
             {
                 return Result.Failure<string>(
-                    new Error("Cache.NotFound", $"Cache key {key} not found.")
-                    );
+                    new Error(CacheCodeMessages.CacheNotFound,
+                    string.Format(CacheMessages.Cache_NotFound, key)));
             }
             return result;
         }

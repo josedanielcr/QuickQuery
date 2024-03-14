@@ -43,7 +43,7 @@ namespace QuickquerySearchAPI.Utilities
                             ? Result.Success(deserializedCacheItem)
                             : Result.Failure<CountrySearchResult>(
                                 new Error(CacheCodeMessages.CacheDeserializeError, 
-                                CacheMessages.Cache_DeserializeObject));
+                                string.Format(CacheMessages.Cache_DeserializeObject,result.Value)));
         }
 
         public async Task SetCountryResponseToCache(Result<CountrySearchResult> result)

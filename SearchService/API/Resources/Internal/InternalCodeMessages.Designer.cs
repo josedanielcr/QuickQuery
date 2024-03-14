@@ -59,5 +59,21 @@ namespace QuickquerySearchAPI.Resources.Internal {
                 resourceCulture = value;
             }
         }
+
+        public static string DeserializationError
+        {
+            get
+            {
+                return ResourceManager.GetString("DeserializationError", resourceCulture);
+            }
+        }
+
+        public static string UserSidNotFound
+        {
+            get
+            {
+                return ResourceManager.GetString("UserSidNotFound", resourceCulture);
+            }
+        }
     }
 }

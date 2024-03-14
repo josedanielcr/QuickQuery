@@ -59,5 +59,30 @@ namespace QuickquerySearchAPI.Resources.DataGateway {
                 resourceCulture = value;
             }
         }
+
+        public static string DataGatewayHttpError
+        {
+            get
+            {
+                return ResourceManager.GetString("DataGatewayHttpError", resourceCulture);
+            }
+        }
+
+
+        public static string DataGatewayEmptyResponse
+        {
+            get
+            {
+                return ResourceManager.GetString("DataGatewayEmptyResponse", resourceCulture);
+            }
+        }
+
+        public static string DataGatewayNotFound
+        {
+            get
+            {
+                return ResourceManager.GetString("DataGatewayNotFound", resourceCulture);
+            }
+        }
     }
 }
