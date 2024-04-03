@@ -1,4 +1,5 @@
 ﻿using AutocompleteServiceAPI.Resources;
+using AutocompleteServiceAPI.Resources.Internal;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;

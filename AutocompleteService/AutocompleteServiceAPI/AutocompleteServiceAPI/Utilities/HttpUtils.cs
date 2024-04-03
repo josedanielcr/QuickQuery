@@ -1,10 +1,8 @@
-﻿using QuickquerySearchAPI.Shared;
-using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Text;
-using QuickquerySearchAPI.Resources.Http;
-using QuickquerySearchAPI.Resources.Internal;
-using Newtonsoft.Json.Linq;
+using AutocompleteServiceAPI.Resources.Http;
+using AutocompleteServiceAPI.Resources.Internal;
+using AutocompleteServiceAPI.Shared;
 
 public class HttpUtils
 {

@@ -1,4 +1,4 @@
-﻿namespace QuickquerySearchAPI.Shared
+﻿namespace AutocompleteServiceAPI.Shared
 {
     public record Error(string Code, string Message)
     {

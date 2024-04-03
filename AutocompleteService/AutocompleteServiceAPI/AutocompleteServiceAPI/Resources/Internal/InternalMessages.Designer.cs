@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace QuickquerySearchAPI.Resources.Internal {
+namespace AutocompleteServiceAPI.Resources.Internal {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace QuickquerySearchAPI.Resources.Internal {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("QuickquerySearchAPI.Resources.Internal.InternalMessages", typeof(InternalMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AutocompleteServiceAPI.Resources.Internal.InternalMessages", typeof(InternalMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -59,27 +59,31 @@ namespace QuickquerySearchAPI.Resources.Internal {
                 resourceCulture = value;
             }
         }
-        public static string JwtSecretNotSetInAppSettings
-        {
-            get
-            {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to deserialize the response. {0}.
+        /// </summary>
+        public static string Deserialization_Error {
+            get {
+                return ResourceManager.GetString("Deserialization.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jwt:Secret is not set in appsettings.json.
+        /// </summary>
+        public static string JwtSecretNotSetInAppSettings {
+            get {
                 return ResourceManager.GetString("JwtSecretNotSetInAppSettings", resourceCulture);
             }
         }
-
-        public static string Deserialization_Error
-        {
-            get
-            {
-                return ResourceManager.GetString("Deserialization_Error", resourceCulture);
-            }
-        }
-
-        public static string UserSid_NotFound
-        {
-            get
-            {
-                return ResourceManager.GetString("UserSid_NotFound", resourceCulture);
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The User sid was not found in the request token.
+        /// </summary>
+        public static string UserSid_NotFound {
+            get {
+                return ResourceManager.GetString("UserSid.NotFound", resourceCulture);
             }
         }
     }

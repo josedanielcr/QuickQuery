@@ -2,9 +2,7 @@
 using AutocompleteServiceAPI.DataStructures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using QuickquerySearchAPI.Resources.Http;
-using QuickquerySearchAPI.Shared;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using AutocompleteServiceAPI.Shared;
 
 namespace AutocompleteServiceAPI.Features
 {
@@ -12,13 +10,11 @@ namespace AutocompleteServiceAPI.Features
     {
         private readonly HttpUtils httpUtils;
         private readonly IConfiguration configuration;
-        public Trie countriesTrie;
 
         public TrieInitialization(HttpUtils httpUtils, IConfiguration configuration)
         {
             this.httpUtils = httpUtils;
             this.configuration = configuration;
-            countriesTrie = new Trie();
         }
 
         public async void InitializeTrie()
@@ -76,7 +72,7 @@ namespace AutocompleteServiceAPI.Features
         {
             foreach (var item in countries)
             {
-                countriesTrie.Insert(item.Name.ToLower());
+                Trie.Insert(item.Name.ToLower());
             }
         }
     }

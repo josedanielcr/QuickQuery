@@ -1,4 +1,4 @@
-﻿namespace QuickquerySearchAPI.Shared
+﻿namespace AutocompleteServiceAPI.Shared
 {
     public class Result
     {

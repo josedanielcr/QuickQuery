@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace QuickquerySearchAPI.Resources.Internal {
+namespace AutocompleteServiceAPI.Resources.Internal {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace QuickquerySearchAPI.Resources.Internal {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("QuickquerySearchAPI.Resources.Internal.InternalCodeMessages", typeof(InternalCodeMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AutocompleteServiceAPI.Resources.Internal.InternalCodeMessages", typeof(InternalCodeMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -59,19 +59,21 @@ namespace QuickquerySearchAPI.Resources.Internal {
                 resourceCulture = value;
             }
         }
-
-        public static string DeserializationError
-        {
-            get
-            {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deserialization.Error.
+        /// </summary>
+        public static string DeserializationError {
+            get {
                 return ResourceManager.GetString("DeserializationError", resourceCulture);
             }
         }
-
-        public static string UserSidNotFound
-        {
-            get
-            {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserSid.NotFound.
+        /// </summary>
+        public static string UserSidNotFound {
+            get {
                 return ResourceManager.GetString("UserSidNotFound", resourceCulture);
             }
         }

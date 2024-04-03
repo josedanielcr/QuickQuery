@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace QuickquerySearchAPI.Resources.Http {
+namespace AutocompleteServiceAPI.Resources.Http {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace QuickquerySearchAPI.Resources.Http {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("QuickquerySearchAPI.Resources.Http.HttpMessages", typeof(HttpMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AutocompleteServiceAPI.Resources.Http.HttpMessages", typeof(HttpMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
