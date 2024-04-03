@@ -1,0 +1,6 @@
+@AutocompleteServiceAPI_HostAddress = http://localhost:5241
+
+GET {{AutocompleteServiceAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
