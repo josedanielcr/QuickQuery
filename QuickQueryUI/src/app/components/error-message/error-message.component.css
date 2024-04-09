@@ -1,0 +1,22 @@
+.message-container {
+    position : absolute;
+    min-height: 25rem;
+    width: 20rem;
+    right: 2rem;
+    bottom: 2rem;
+    background-color: rgb(197, 99, 114);
+    border-radius: 0.5rem;
+}
+
+.message-container p, .message-container h3 {
+    color: white;
+}
+
+.message-container button {
+    all: unset;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    background-color: black;
+    color: white;
+    border-radius: 0.5rem;
+}

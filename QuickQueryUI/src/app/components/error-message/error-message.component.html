@@ -1,0 +1,13 @@
+@if(visible){
+    <div class="message-container p-3">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <img src="../../../assets/errormonster.png"
+                class="img-fluid">
+            <h3 class="text-center">{{title}}</h3>
+            <p class="text-center">{{message}}</p>
+            <button (click)="close()">
+                Continue
+            </button>
+        </div>
+    </div>
+}
