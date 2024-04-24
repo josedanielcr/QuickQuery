@@ -1,0 +1,14 @@
+.country-container {
+    height: calc(100vh - 5rem);
+}
+
+.country-card{
+    background-color: white;
+    width: 50rem;
+    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+    border-radius: 0.5rem;
+}
+
+a {
+    color: purple;
+}
