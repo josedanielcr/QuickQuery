@@ -1,0 +1,24 @@
+<div class="country-container">
+    <div class="h-100 d-flex justify-content-center align-items-center flex-column">
+        <div class="country-card p-3">
+            <!-- <h3>{{searchService.activeCountry()?.name}}</h3> -->
+            <div class="d-flex align-items-center">
+                <h3>{{searchService.activeCountry()?.name}}</h3>
+                <p class="ms-auto p-0 mb-0">
+                    Searched by 
+                    {{searchService.activeCountry()?.popularity || 0}}
+                    users
+                </p>
+                <div class="ms-2">
+                    <a routerLink="/home">Go back</a>
+                </div>
+            </div>
+            <hr>
+            <div>
+                @if(chartData){
+                    <canvasjs-chart [options]="chartData"></canvasjs-chart>
+                }
+            </div>
+        </div>
+      </div>
+</div>

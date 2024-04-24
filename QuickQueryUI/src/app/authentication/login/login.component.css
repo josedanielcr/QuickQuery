@@ -1,0 +1,47 @@
+.login-container {
+    height: calc(100vh - 5rem);
+}
+
+.login-form {
+    width: 45rem;
+    height: 30rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+
+input {
+    height: 3rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    padding-left: 0.5rem;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #474F7A;
+}
+
+a {
+    color: purple;
+}
+
+button {
+    height: 3rem;
+    border-radius: 0.5rem;
+    background-color: #474F7A;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+    .login-form {
+        width: 90%;
+    }
+}

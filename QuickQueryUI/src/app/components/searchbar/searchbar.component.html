@@ -1,0 +1,26 @@
+<div class="searchbar-container d-flex position-relative" [ngClass]="{
+    'searchbar-container-inactive': autocompleteService.countries()?.length === 0,
+    'searchbar-container-active': autocompleteService.countries()?.length! > 0
+}">
+    <div class="ms-3 d-flex align-items-center" (click)="focusInput()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <input type="text" #searchInput class="w-100" 
+        (input)="autocompleteSearch($event)"
+        (keydown.enter)="searchCountry(searchInput.value)"
+        >
+    <div class="me-3 d-flex align-items-center" (click)="cleanInput()">
+        <i class="fa-solid fa-x clean-icon"></i>
+    </div>
+</div>
+
+@if(autocompleteService.countries()?.length! > 0) {
+    <div class="autocomplete-container p-3">
+        @for(country of autocompleteService.countries(); track country){
+            <div class="country-container" (click)="searchCountry(country)">
+                <h5>{{country}}</h5>
+                <hr>
+            </div>
+        }
+    </div>
+}

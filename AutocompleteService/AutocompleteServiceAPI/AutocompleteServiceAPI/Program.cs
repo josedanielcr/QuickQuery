@@ -12,6 +12,7 @@ builder.Services.AddCustomHttpClient();
 builder.Services.AddAppConfiguration();
 builder.Services.AddApplicationMediatR();
 builder.Services.AddCarter();
+builder.Services.AddApplicationCors();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -24,6 +25,7 @@ var serviceProvider = builder.Services.BuildServiceProvider();
 var trieInit = serviceProvider.GetService<TrieInitialization>();
 trieInit.InitializeTrie();
 app.MapCarter();
+app.UseCors("Policy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
