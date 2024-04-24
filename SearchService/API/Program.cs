@@ -14,6 +14,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddRedisConfiguration(builder.Configuration);
 builder.Services.AddApplicationUtils();
 builder.Services.AddCustomHttpClient();
+builder.Services.AddApplicationCors();
 
 var app = builder.Build();
 
@@ -25,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 AddConfigurationHelper.Initialize(builder.Configuration);
 app.MapCarter();
+app.UseCors("Policy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
